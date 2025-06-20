@@ -1,15 +1,22 @@
 from flask import Blueprint, request, jsonify
 from flask_cors import CORS
 import praw
+import os
+from dotenv import load_dotenv
 import traceback
 
-reddit_api = Blueprint("reddit_api", __name__)  # ✅ Fix here
+# 🔐 Load env variables
+load_dotenv(dotenv_path=r"C:\\Users\\jains\\OneDrive\\Desktop\\reactproject\\reactproject\\aiml\\.env")
+
+# 🌐 Setup Blueprint & CORS
+reddit_api = Blueprint("reddit_api", __name__)
 CORS(reddit_api)
 
+# 🔧 Load Reddit API credentials from .env
 reddit = praw.Reddit(
-    client_id='2LEniuGaTItKLf1B-Vn4Hw',
-    client_secret='Nl0SaOLVDbxaICjafgUse8hXbdPEIw',
-    user_agent='AI News Fetcher by /u/Proper_Macaron2807'
+    client_id=os.getenv("reddit_client_id"),
+    client_secret=os.getenv("reddit_client_secret"),
+    user_agent=os.getenv("reddit_user_agent")
 )
 
 DEFAULT_SUBREDDITS = [
@@ -17,6 +24,7 @@ DEFAULT_SUBREDDITS = [
     "DeepLearning", "Futurology", "Computervision", "LanguageTechnology"
 ]
 
+# 📰 Reddit News Endpoint
 @reddit_api.route("/news", methods=["GET"])
 def fetch_reddit_news():
     subreddits = request.args.get("subreddits", "")
