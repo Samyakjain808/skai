@@ -1,0 +1,198 @@
+/* html, body {
+  height: 100%;
+  margin: 0;
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+  overflow: hidden;
+}
+
+#stars, #stars2, #stars3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+}
+
+#stars {
+  background: transparent;
+  box-shadow:
+    100px 500px #FFF, 200px 600px #FFF, 300px 700px #FFF,
+    400px 800px #FFF, 500px 900px #FFF, 600px 100px #FFF,
+    700px 300px #FFF, 800px 400px #FFF;
+  width: 1px;
+  height: 1px;
+  animation: animStar 50s linear infinite;
+}
+
+#stars:after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: inherit;
+}
+
+#stars2 {
+  background: transparent;
+  box-shadow:
+    150px 700px #FFF, 250px 800px #FFF, 350px 900px #FFF,
+    450px 1000px #FFF, 550px 1100px #FFF;
+  width: 2px;
+  height: 2px;
+  animation: animStar 100s linear infinite;
+}
+
+#stars2:after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow: inherit;
+}
+
+#stars3 {
+  background: transparent;
+  box-shadow:
+    120px 400px #FFF, 220px 500px #FFF, 320px 600px #FFF,
+    420px 700px #FFF, 520px 800px #FFF;
+  width: 3px;
+  height: 3px;
+  animation: animStar 150s linear infinite;
+}
+
+#stars3:after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 3px;
+  height: 3px;
+  background: transparent;
+  box-shadow: inherit;
+}
+
+@keyframes animStar {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-2000px);
+  }
+} */
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+  overflow: hidden; /* Prevent horizontal scroll */
+  scroll-behavior: smooth;
+}
+
+
+/* Fix for framer-motion sometimes not triggering
+.motion-div {
+  transform-style: preserve-3d;
+} */
+/* #stars, #stars2, #stars3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+} */
+
+
+
+#stars, #stars2, #stars3 {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0; /* Behind all content */
+  background: transparent;
+}
+
+/* ⭐ Small Stars */
+#stars {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow:
+    50px 100px #FFF, 150px 300px #FFF, 250px 500px #FFF, 350px 700px #FFF,
+    450px 900px #FFF, 550px 1100px #FFF, 650px 1300px #FFF, 750px 1500px #FFF,
+    850px 1700px #FFF, 950px 1900px #FFF, 1050px 2100px #FFF, 1150px 2300px #FFF,
+    1250px 250px #FFF, 1350px 450px #FFF, 1450px 650px #FFF, 1550px 850px #FFF,
+    1650px 1050px #FFF, 1750px 1250px #FFF, 1850px 1450px #FFF, 1950px 1650px #FFF;
+  animation: animStarLeft 30s linear infinite;
+}
+
+/* ⭐⭐ Medium Stars */
+#stars2 {
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow:
+    100px 400px #FFF, 200px 600px #FFF, 300px 800px #FFF, 400px 1000px #FFF,
+    500px 1200px #FFF, 600px 1400px #FFF, 700px 1600px #FFF,
+    800px 1800px #FFF, 900px 200px #FFF, 1000px 400px #FFF, 1100px 600px #FFF,
+    1200px 800px #FFF, 1300px 1000px #FFF;
+  animation: animStarRight 50s linear infinite;
+}
+
+/* ⭐⭐⭐ Large Stars */
+#stars3 {
+  width: 3px;
+  height: 3px;
+  background: transparent;
+  box-shadow:
+    200px 200px #FFF, 300px 500px #FFF, 400px 800px #FFF, 500px 1100px #FFF,
+    600px 1400px #FFF, 700px 1700px #FFF, 800px 2000px #FFF,
+    900px 2300px #FFF, 1000px 2600px #FFF;
+  animation: animStarDiagonal 70s linear infinite;
+}
+
+/* Duplicate stars using :after for depth */
+#stars:after, #stars2:after, #stars3:after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: inherit;
+  height: inherit;
+  background: transparent;
+  box-shadow: inherit;
+}
+
+/* 🔄 Movement animations */
+@keyframes animStarLeft {
+  from {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(-2000px, -2000px);
+  }
+}
+
+@keyframes animStarRight {
+  from {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(2000px, -2000px);
+  }
+}
+
+@keyframes animStarDiagonal {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+  100% {
+    transform: translate(-1500px, -1500px) rotate(360deg);
+  }
+}
