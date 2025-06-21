@@ -1,3 +1,35 @@
-flask
+# Core Flask & CORS
+Flask
+flask-cors
+
+# Environment variable loading
+python-dotenv
+
+# Transformers & Torch (for all models including BERT, T5, BLIP, Whisper)
 torch
 transformers
+
+# NLP (sentence tokenization, spaCy, etc.)
+nltk
+spacy
+
+# Speech/audio processing
+soundfile
+
+# Image processing
+Pillow
+
+# Graph visualization
+graphviz
+
+# YouTube Transcript
+youtube-transcript-api
+
+# Reddit API
+praw
+
+# Google Generative AI SDK
+google-generativeai
+
+# HTTP requests
+requests

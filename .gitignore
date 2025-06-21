@@ -26,8 +26,6 @@ build/
 .env.*.local
 *.local
 
-# Supabase client (contains secrets/config)
-supabaseClient.js
 
 # Fine-tuned models and checkpoints
 *.ckpt
