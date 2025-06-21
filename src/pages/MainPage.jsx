@@ -191,15 +191,15 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import Navbar from "../component/Navbar";
+import Navbar from "../components/Navbar";
 import Layout from "../layout/Layout"; // ⬅️ import layout
 import Home from "./Home";
 import About from "./about";
 import Feedback from "./feedback";
-import FakeNewsPage from "../component/NewsInput";
+import FakeNewsPage from "../components/NewsInput";
 import SummarizationPage from "./SummarizationPage";
 import AudioTranscriptionPage from "./AudioTranscriptionPage";
-import MindMapPage from "../component/MindMap";
+import MindMapPage from "../components/MindMap";
 import AINewsPage from "./AINewsPage";
 import Youtubenotes from "./youtubenotes";
 import Captionpage from "./Captionpage";

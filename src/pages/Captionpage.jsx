@@ -1,5 +1,5 @@
 import React from "react";
-import ImageCaptioner from "../component/ImageCaptioner";
+import ImageCaptioner from "../components/ImageCaptioner";
 
 const Captionpage = () => (
   <div className="max-w-3xl mx-auto p-4">

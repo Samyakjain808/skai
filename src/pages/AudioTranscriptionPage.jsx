@@ -1,5 +1,5 @@
 import React from "react";
-import AudioTranscriber from "../component/AudioTranscriber";
+import AudioTranscriber from "../components/AudioTranscriber";
 
 const AudioTranscriptionPage = () => {
   return (
