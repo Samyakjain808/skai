@@ -194,8 +194,8 @@ import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import Layout from "../layout/Layout"; // ⬅️ import layout
 import Home from "./Home";
-import About from "./about";
-import Feedback from "./feedback";
+import About from "./About";
+import Feedback from "./Feedback";
 import FakeNewsPage from "../components/NewsInput";
 import SummarizationPage from "./SummarizationPage";
 import AudioTranscriptionPage from "./AudioTranscriptionPage";

@@ -257,6 +257,10 @@
 // };
 
 // export const useAuth = () => useContext(AuthContext);
+
+
+
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../supabase/supabaseClient";
 import { useNavigate } from "react-router-dom";
@@ -300,7 +304,7 @@ export const AuthProvider = ({ children }) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:5173", // ✅ redirect back to root — don't use /fakenews
+        redirectTo: "https://skai-nine.vercel.app/home", // ✅ redirect back to root — don't use /fakenews
       },
     });
     if (error) console.error("Google login error:", error.message);
@@ -310,7 +314,7 @@ export const AuthProvider = ({ children }) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: "http://localhost:5173", // ✅ redirect back to root — not to a protected page
+        redirectTo: "https://skai-nine.vercel.app/home", // ✅ redirect back to root — not to a protected page
       },
     });
     if (error) console.error("GitHub login error:", error.message);
