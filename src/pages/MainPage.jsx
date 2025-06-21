@@ -201,7 +201,7 @@ import SummarizationPage from "./SummarizationPage";
 import AudioTranscriptionPage from "./AudioTranscriptionPage";
 import MindMapPage from "../components/MindMap";
 import AINewsPage from "./AINewsPage";
-import Youtubenotes from "./youtubenotes";
+import Youtubenotes from "./Youtubenotes";
 import Captionpage from "./Captionpage";
 
 const MainPage = () => {
