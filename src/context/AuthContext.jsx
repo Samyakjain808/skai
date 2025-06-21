@@ -304,7 +304,7 @@ export const AuthProvider = ({ children }) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "https://skai-nine.vercel.app/home", // ✅ redirect back to root — don't use /fakenews
+        redirectTo: "https://skai-nine.vercel.app", // ✅ redirect back to root — don't use /fakenews
       },
     });
     if (error) console.error("Google login error:", error.message);
@@ -314,7 +314,7 @@ export const AuthProvider = ({ children }) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: "https://skai-nine.vercel.app/home", // ✅ redirect back to root — not to a protected page
+        redirectTo: "https://skai-nine.vercel.app", // ✅ redirect back to root — not to a protected page
       },
     });
     if (error) console.error("GitHub login error:", error.message);
