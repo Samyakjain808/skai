@@ -35,13 +35,8 @@
 // src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./component/Navbar";
-import FakeNewsPage from "./pages/FakeNewsPage";
-import SummarizationPage from "./pages/SummarizationPage";
-import AudioTranscriptionPage from "./pages/AudioTranscriptionPage";
-import MindMapPage from "./pages/MindMapPage";
-import Register from "./component/Register";
-import Login from "./component/Login";
+import Register from "./components/Register";
+import Login from "./components/Login";
 import { AuthProvider } from "./context/AuthContext";
 import MainPage from "./pages/MainPage"; // Import the MainPage component
 const App = () => {
