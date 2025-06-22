@@ -27,18 +27,6 @@ build/
 *.local
 
 
-# Fine-tuned models and checkpoints
-*.ckpt
-*.pt
-*.pth
-*.bin
-*.joblib
-*.pkl
-*.sav
-models/
-checkpoints/
-saved_models/
-
 # System files
 .DS_Store
 Thumbs.db
