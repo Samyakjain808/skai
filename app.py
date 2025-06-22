@@ -25,7 +25,4 @@ def home():
     return "✅ Unified Flask API is running with BERT and T5!"
 
 if __name__ == '__main__':
-    # app.run(debug=False, use_reloader=False)
-
-    port = int(os.environ.get("PORT", 5000))  # Render sets this PORT env var
-    app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
+    app.run(debug=False, use_reloader=False)
