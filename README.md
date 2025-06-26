@@ -1,12 +1,53 @@
-# React + Vite
+# Skelix – AI Toolbox Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Skelix is a full-stack AI productivity platform that integrates powerful NLP and vision models to streamline tasks like summarization, transcription, mind mapping, video note extraction, and more.
 
-Currently, two official plugins are available:
+## 🚀 Live Preview
+🌐 **Frontend (Preview Only):** [https://skai-nine.vercel.app](https://skai-nine.vercel.app)  
+🎥 **Full Demo Video:** [Watch on YouTube](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> 💡 Note: Due to model size and backend constraints, some features are demonstrated in the video but not live on the frontend deployment.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ✨ Key Features
+
+- 📄 **Document Summarization** – using BERT and T5
+- 🎙️ **Speech-to-Text Transcription** – via OpenAI Whisper
+- 🧠 **Mind Map Generation** – from extracted text
+- 📹 **YouTube Note Extraction** – converts video content to notes
+- 🖼️ **Image Captioning** – automatic caption generation from image input
+- 🗞️ **AI-Powered News Feed** – curated summaries from trending sources
+- 🔐 **Authentication** – secure login via Supabase OAuth
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend:
+- ⚛️ React (Vite)
+- 🎨 Tailwind CSS
+- 🔐 Supabase (Auth & DB)
+- 📦 Zustand (or Redux, depending on version)
+- 📄 React Router
+
+### Backend (in separate repo / local):
+- 🐍 Python Flask (REST API)
+- 🤖 Transformers: BERT, T5, Whisper, etc.
+- 📥 Hugging Face, OpenAI APIs
+- 🧠 Custom NLP Pipelines
+
+---
+
+## 🔐 .env Configuration
+
+Create a `.env` file in your project root with the following variables:
+
+```env
+api_key_for_youtube=your_youtube_api_key
+reddit_client_id=your_reddit_client_id
+reddit_client_secret=your_reddit_client_secret
+reddit_user_agent=your_reddit_user_agent
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+api_key_for_captioning=your_image_captioning_api_key
