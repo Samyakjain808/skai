@@ -51,3 +51,19 @@ reddit_user_agent=your_reddit_user_agent
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 api_key_for_captioning=your_image_captioning_api_key
+
+```
+
+# Clone the repository
+```
+git clone https://github.com/Samyakjain808/skai.git
+cd skai
+```
+# Install dependencies
+```
+npm install
+```
+# Start local dev server
+```
+npm run dev
+```
