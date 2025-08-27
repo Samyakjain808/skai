@@ -4,7 +4,7 @@ Skelix is a full-stack AI productivity platform that integrates powerful NLP and
 
 ## 🚀 Live Preview
 🌐 **Frontend (Preview Only):** [https://skai-nine.vercel.app](https://skai-nine.vercel.app)  
-🎥 **Full Demo Video:** [Watch on YouTube]((https://www.youtube.com/watch?v=pLV5bHFV72M))
+🎥 **Full Demo Video:** [Watch on YouTube]([https://www.youtube.com/watch?v=pLV5bHFV72M])
 
 > 💡 Note: Due to model size and backend constraints, some features are demonstrated in the video but not live on the frontend deployment.
 
