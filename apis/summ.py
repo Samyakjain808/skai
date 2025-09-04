@@ -140,32 +140,59 @@
 # if __name__ == "__main__":
 #     app.run(debug=True)
 
-from flask import Blueprint, request, jsonify
-from flask_cors import CORS
-import torch
-from transformers import T5Tokenizer, T5ForConditionalGeneration
+# from flask import Blueprint, request, jsonify
+# from flask_cors import CORS
+# import torch
+# from transformers import T5Tokenizer, T5ForConditionalGeneration
 
-import nltk
-from nltk.tokenize import sent_tokenize
+# import nltk
+# from nltk.tokenize import sent_tokenize
 
-summ_api = Blueprint('summ_api', __name__)
-CORS(summ_api)
+# summ_api = Blueprint('summ_api', __name__)
+# CORS(summ_api)
 
-model_path = "C:\\Users\\jains\\OneDrive\\Desktop\\reactproject\\reactproject\\aiml\\model\\t5_finetuned_model.pt"
-tokenizer = T5Tokenizer.from_pretrained("t5-small")
-model = T5ForConditionalGeneration.from_pretrained("t5-small")
+# model_path = "C:\\Users\\jains\\OneDrive\\Desktop\\reactproject\\reactproject\\aiml\\model\\t5_finetuned_model.pt"
+# tokenizer = T5Tokenizer.from_pretrained("t5-small")
+# model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
-try:
-    model.load_state_dict(torch.load(model_path, map_location=torch.device("cpu")))
-    model.eval()
-    print("✅ T5 model loaded successfully.")
-except Exception as e:
-    print(f"❌ Failed to load T5 model: {e}")
-    exit(1)
+# try:
+#     model.load_state_dict(torch.load(model_path, map_location=torch.device("cpu")))
+#     model.eval()
+#     print("✅ T5 model loaded successfully.")
+# except Exception as e:
+#     print(f"❌ Failed to load T5 model: {e}")
+#     exit(1)
 
-@summ_api.route("/", methods=["GET"])
-def home_summ():
-    return "✅ T5 Text Generation API is running!"
+# @summ_api.route("/", methods=["GET"])
+# def home_summ():
+#     return "✅ T5 Text Generation API is running!"
+
+# # @summ_api.route("/generate", methods=["POST"])
+# # def generate():
+# #     data = request.get_json()
+# #     if not data or "text" not in data:
+# #         return jsonify({"error": "Missing 'text' in request"}), 400
+
+# #     text = data["text"]
+# #     input_ids = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
+
+# #     with torch.no_grad():
+# #         outputs = model.generate(
+# #             input_ids.input_ids,
+# #             max_length=128,
+# #             num_beams=4,
+# #             early_stopping=True,
+# #             no_repeat_ngram_size=2,
+# #             length_penalty=1.0
+# #         )
+
+#     # result = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+#     # return jsonify({
+#     #     "input": text,
+#     #     "output": result
+#     # })
+
 
 # @summ_api.route("/generate", methods=["POST"])
 # def generate():
@@ -179,20 +206,45 @@ def home_summ():
 #     with torch.no_grad():
 #         outputs = model.generate(
 #             input_ids.input_ids,
-#             max_length=128,
+#             max_length=512,
+#             min_length=100,
 #             num_beams=4,
-#             early_stopping=True,
+#             early_stopping=False,
 #             no_repeat_ngram_size=2,
 #             length_penalty=1.0
 #         )
 
-    # result = tokenizer.decode(outputs[0], skip_special_tokens=True)
+#     raw_output = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-    # return jsonify({
-    #     "input": text,
-    #     "output": result
-    # })
+#     # 🧠 Use nltk to extract only complete sentences
+#     sentences = sent_tokenize(raw_output)
+#     completed_output = " ".join(sentences)
 
+#     return jsonify({
+#         "input": text,
+#         "output": completed_output
+#     })
+from flask import Blueprint, request, jsonify
+from flask_cors import CORS
+import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load .env variables
+
+summ_api = Blueprint('summ_api', __name__)
+CORS(summ_api)
+
+# Hugging Face Space URL and token
+HF_API_URL = os.getenv("HF_API_URL_T5")  # e.g., https://samyak38-st5.hf.space/predict
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+if not HF_API_URL or not HF_TOKEN:
+    raise ValueError("Please set HF_API_URL_T5 and HF_TOKEN in your environment variables!")
+
+@summ_api.route("/", methods=["GET"])
+def home_summ():
+    return "✅ T5 Text Generation API is running via Hugging Face Space!"
 
 @summ_api.route("/generate", methods=["POST"])
 def generate():
@@ -201,27 +253,24 @@ def generate():
         return jsonify({"error": "Missing 'text' in request"}), 400
 
     text = data["text"]
-    input_ids = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
 
-    with torch.no_grad():
-        outputs = model.generate(
-            input_ids.input_ids,
-            max_length=512,
-            min_length=100,
-            num_beams=4,
-            early_stopping=False,
-            no_repeat_ngram_size=2,
-            length_penalty=1.0
-        )
+    # HF Spaces API payload
+    payload = {"data": [text]}
+    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
 
-    raw_output = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    try:
+        response = requests.post(HF_API_URL, json=payload, headers=headers)
+        response.raise_for_status()
+        result = response.json()
+        
+        # HF Spaces usually returns a list under "data"
+        output_text = result.get("data", [""])[0]
 
-    # 🧠 Use nltk to extract only complete sentences
-    sentences = sent_tokenize(raw_output)
-    completed_output = " ".join(sentences)
+        return jsonify({
+            "input": text,
+            "output": output_text
+        })
 
-    return jsonify({
-        "input": text,
-        "output": completed_output
-    })
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"Failed to get response from HF Space: {e}"}), 500
 

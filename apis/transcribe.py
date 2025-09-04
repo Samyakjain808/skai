@@ -180,33 +180,22 @@
 #             os.remove(tmp_path)
 
 from flask import Blueprint, request, jsonify
-import torch
-import os
-import tempfile
-import soundfile as sf
-from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq
 from flask_cors import CORS
+import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 transcribe_api = Blueprint("transcribe_api", __name__)
 CORS(transcribe_api)
 
-# Set device
-device = "cuda" if torch.cuda.is_available() else "cpu"
+# Retrieve Hugging Face API URL and token from environment variables
+HF_API_URL = os.getenv("HF_API_URL_WHISPER")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
-# Load processor and model
-processor = AutoProcessor.from_pretrained("./model/distil-whisper-distil-small.en")
-model = AutoModelForSpeechSeq2Seq.from_pretrained("distil-whisper/distil-small.en")
-model.load_state_dict(torch.load("./model/distil_whisper_small_en.pt", map_location=device))
-model.to(device)
-model.eval()
-
-# Helper: split waveform into chunks
-def split_into_chunks(waveform, chunk_length_s, sample_rate):
-    chunk_samples = int(chunk_length_s * sample_rate)
-    chunks = []
-    for i in range(0, waveform.shape[1], chunk_samples):
-        chunks.append(waveform[:, i:i + chunk_samples])
-    return chunks
+if not HF_API_URL or not HF_TOKEN:
+    raise ValueError("Please set HF_API_URL_WHISPER and HF_TOKEN in your environment variables!")
 
 @transcribe_api.route("/transcribe_fast", methods=["POST"])
 def transcribe_fast():
@@ -219,59 +208,26 @@ def transcribe_fast():
     if ext != ".wav":
         return jsonify({"error": f"Only WAV files are supported. You uploaded: {ext}"}), 400
 
-    tmp_path = None
     try:
-        # Save file temporarily
-        with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp:
-            tmp.write(audio.read())
-            tmp.flush()
-            tmp_path = tmp.name
+        # Prepare the audio file for upload
+        audio_data = audio.read()
 
-        # Load audio
-        waveform_np, sr = sf.read(tmp_path)
-        waveform = torch.tensor(waveform_np, dtype=torch.float32)
+        # Prepare the payload for the Hugging Face Space API
+        payload = {"data": [audio_data]}
+        headers = {"Authorization": f"Bearer {HF_TOKEN}"}
 
-        # Convert to mono if stereo
-        if waveform.ndim > 1:
-            waveform = waveform.mean(dim=1)
-        waveform = waveform.unsqueeze(0)  # shape: [1, samples]
+        # Send the audio file to the Hugging Face Space for transcription
+        response = requests.post(HF_API_URL, files={"file": audio_data}, headers=headers)
+        response.raise_for_status()
 
-        # Resample if needed
-        if sr != 16000:
-            resample_ratio = 16000 / sr
-            num_samples = int(waveform.shape[1] * resample_ratio)
-            waveform = torch.nn.functional.interpolate(
-                waveform.unsqueeze(1), size=num_samples, mode="linear", align_corners=False
-            ).squeeze(1)
-
-        # Split into 30s chunks
-        chunks = split_into_chunks(waveform, chunk_length_s=30, sample_rate=16000)
-        full_transcription = ""
-
-        for chunk in chunks:
-            if chunk.shape[1] < 16000:  # skip too-short chunks
-                continue
-
-            input_features = processor(
-                chunk.squeeze(0),
-                sampling_rate=16000,
-                return_tensors="pt"
-            ).input_features.to(device)
-
-            with torch.no_grad():
-                predicted_ids = model.generate(input_features)
-
-            text = processor.batch_decode(predicted_ids, skip_special_tokens=True)[0]
-            full_transcription += text.strip() + " "
+        # Extract the transcription from the response
+        result = response.json()
+        transcription = result.get("data", [""])[0]
 
         return jsonify({
             "note": "Only English WAV files are supported.",
-            "transcription": full_transcription.strip()
+            "transcription": transcription.strip()
         })
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-    finally:
-        if tmp_path and os.path.exists(tmp_path):
-            os.remove(tmp_path)
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"Failed to get response from HF Space: {e}"}), 500

@@ -5,14 +5,14 @@ import os
 from dotenv import load_dotenv
 import traceback
 
+
 # 🔐 Load env variables
 load_dotenv(dotenv_path=r"C:\\Users\\jains\\OneDrive\\Desktop\\reactproject\\reactproject\\aiml\\.env")
 
-# 🌐 Setup Blueprint & CORS
+
 reddit_api = Blueprint("reddit_api", __name__)
 CORS(reddit_api)
-
-# 🔧 Load Reddit API credentials from .env
+# ✅ Setup PRAW with your credentials
 reddit = praw.Reddit(
     client_id=os.getenv("reddit_client_id"),
     client_secret=os.getenv("reddit_client_secret"),
@@ -24,16 +24,11 @@ DEFAULT_SUBREDDITS = [
     "DeepLearning", "Futurology", "Computervision", "LanguageTechnology"
 ]
 
-# 📰 Reddit News Endpoint
 @reddit_api.route("/news", methods=["GET"])
 def fetch_reddit_news():
-    subreddits = request.args.get("subreddits", "")
-    if subreddits:
-        subreddits = subreddits.split(",")
-    else:
-        subreddits = DEFAULT_SUBREDDITS
-
+    subreddits = request.args.getlist("subreddits") or DEFAULT_SUBREDDITS
     limit = int(request.args.get("limit", 10))
+
     result = {}
 
     try:
@@ -50,5 +45,4 @@ def fetch_reddit_news():
             result[subreddit_name] = posts
         return jsonify(result)
     except Exception as e:
-        traceback.print_exc()
         return jsonify({"error": str(e)}), 500

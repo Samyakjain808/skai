@@ -8,6 +8,13 @@ from apis.reddit import reddit_api
 from apis.youtubetrans import gemini_api
 from apis.caption import caption_api
 import os
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # This loads all the variables from your .env file
+
+HF_TOKEN = os.getenv("HF_TOKEN")
+HF_API_URL = os.getenv("HF_API_URL")
 
 app = Flask(__name__)
 CORS(app)
@@ -25,7 +32,4 @@ def home():
     return "✅ Unified Flask API is running with BERT and T5!"
 
 if __name__ == '__main__':
-    # app.run(debug=False, use_reloader=False)
-
-    port = int(os.environ.get("PORT", 5000))  # Render sets this PORT env var
-    app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
+    app.run(debug=False, use_reloader=False)
