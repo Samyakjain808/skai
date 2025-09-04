@@ -1,20 +1,23 @@
-# Core Flask & CORS
+# Core Flask & CORS 
 Flask
 flask-cors
+gunicorn
 
 # Environment variable loading
 python-dotenv
 
-# Transformers & Torch (for all models including BERT, T5, BLIP, Whisper)
-torch
+# HTTP requests
+requests
+
+# Transformers (for BLIP captioning)
 transformers
 
-# NLP (sentence tokenization, spaCy, etc.)
-nltk
-spacy
+# Torch (required for BLIP + Hugging Face models)
+torch==2.5.1
 
-# Speech/audio processing
-soundfile
+# NLP (spaCy for mindmap + en_core_web_sm model)
+spacy
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
 
 # Image processing
 Pillow
@@ -30,6 +33,3 @@ praw
 
 # Google Generative AI SDK
 google-generativeai
-
-# HTTP requests
-requests
